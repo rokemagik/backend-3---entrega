@@ -1,60 +1,143 @@
+openapi: 3.0.1
+info:
+  title: API Users
+  description: Documentación de las rutas del módulo Users
+  version: 1.0.0
+
 paths:
   /api/users:
     get:
       summary: Obtener todos los usuarios
+      description: Devuelve una lista con todos los usuarios registrados.
       tags:
         - Users
       responses:
         "200":
           description: Lista de usuarios obtenida correctamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  payload:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/User"
 
   /api/users/{uid}:
     get:
       summary: Obtener un usuario por ID
+      description: Busca un usuario mediante su ID.
       tags:
         - Users
       parameters:
         - in: path
           name: uid
           required: true
+          description: ID del usuario
           schema:
             type: string
       responses:
         "200":
           description: Usuario encontrado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  payload:
+                    $ref: "#/components/schemas/User"
         "404":
           description: Usuario no encontrado
 
     put:
       summary: Actualizar un usuario
+      description: Actualiza la información de un usuario.
       tags:
         - Users
       parameters:
         - in: path
           name: uid
           required: true
+          description: ID del usuario
           schema:
             type: string
       requestBody:
         required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserInput"
       responses:
         "200":
-          description: Usuario actualizado
+          description: Usuario actualizado correctamente
         "404":
           description: Usuario no encontrado
 
     delete:
       summary: Eliminar un usuario
+      description: Elimina un usuario por su ID.
       tags:
         - Users
       parameters:
         - in: path
           name: uid
           required: true
+          description: ID del usuario
           schema:
             type: string
       responses:
         "200":
-          description: Usuario eliminado
+          description: Usuario eliminado correctamente
         "404":
           description: Usuario no encontrado
+
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        _id:
+          type: string
+          example: 69f888dfb0edc9571af09dda
+        first_name:
+          type: string
+          example: Emi
+        last_name:
+          type: string
+          example: Test
+        email:
+          type: string
+          example: test@test.com
+        age:
+          type: integer
+          example: 25
+        role:
+          type: string
+          example: user
+        pets:
+          type: array
+          items:
+            type: string
+
+    UserInput:
+      type: object
+      properties:
+        first_name:
+          type: string
+          example: Juan
+        last_name:
+          type: string
+          example: Pérez
+        email:
+          type: string
+          example: juan@gmail.com
+        age:
+          type: integer
+          example: 30
